@@ -1,3 +1,4 @@
 # Online Shopping Website
 A website for selling and managing books.
-Frameworks & Technologies:.NET Framework, ASP.NET.
+
+Frameworks and technologies:.NET Framework, ASP.NET.
