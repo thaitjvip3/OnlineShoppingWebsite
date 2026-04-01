@@ -1,0 +1,333 @@
+﻿@model PagedList.IPagedList<WebBanSach.Models.Product>
+@using PagedList.Mvc;
+@{
+    ViewBag.Title = "SearchBook";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var culture = System.Globalization.CultureInfo.GetCultureInfo("vi-VN");
+}
+
+}
+<div class="page-shop-sidebar left--sidebar bg--white section-padding--lg" style="margin-top:80px">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-3 col-12 order-2 order-lg-1 md-mt-40 sm-mt-40">
+                <aside class="wedget__categories poroduct--tag">
+                    <h3 class="wedget__title">Thề loại</h3>
+                    <ul>
+
+                        @foreach (var item in ViewBag.Cate)
+                        {
+                            bool check = false;
+                            if (ViewBag.CateChose != null)
+                            {
+                                foreach (var cateChose in ViewBag.CateChose)
+                                {
+                                    if (cateChose.Equals(item.CateName))
+                                    {
+                                        check = true;
+
+                                        break;
+                                    }
+
+                                }
+                                if (check == true)
+                                {
+                                    <li><button class="btn btn-success btnCate " style="margin-top:5px">@item.CateName</button></li>
+                                }
+                                else
+                                {
+                                    <li><button class="btn btn-default btnCate " style="margin-top:5px">@item.CateName</button></li>
+                                }
+                            }
+                            else
+                            {
+                                <li><button class="btn btn-default btnCate " style="margin-top:5px">@item.CateName</button></li>
+                            }
+
+                        }
+                    </ul>
+                </aside>
+                <aside class="wedget__categories poroduct--tag">
+                    <h3 class="wedget__title">Thể loại</h3>
+                    <ul>
+
+                        @foreach (var item in ViewBag.Supplier)
+                        {
+                            bool check = false;
+                            if (ViewBag.SuplierChose != null)
+                            {
+                                foreach (var cateChose in ViewBag.SuplierChose)
+                                {
+                                    if (cateChose.Equals(item.SuplierName))
+                                    {
+                                        check = true;
+                                        break;
+                                    }
+
+                                }
+                                if (check == true)
+                                {
+                                    <li><button class="btn btn-success  btnSup " style="margin-top:5px">@item.SuplierName</button></li>
+                                }
+                                else
+                                {
+                                    <li><button class="btn btn-default btnSup " style="margin-top:5px">@item.SuplierName</button></li>
+                                }
+                            }
+                            else
+                            {
+                                <li><button class="btn btn-default btnSup " style="margin-top:5px">@item.SuplierName</button></li>
+                            }
+
+                        }
+
+
+
+                    </ul>
+                </aside>
+                <form action='@Url.Action("SearchBook","BookShop")' method="post" onsubmit="return false">
+                    <div class="shop__sidebar">
+
+                        <aside class="widget " style="margin-bottom:10px">
+                            <h3 class="wedget__title">Tên sách</h3>
+                            <div class="search_form">
+                                <input type="text" value="@ViewBag.Name" size="20" class="form-control" id="searchName" placeholder=" Tên sách" name="search">
+                            </div>
+                        </aside>
+
+                        <aside class="wedget__categories pro--range">
+                            <div class="price--filter">
+                                <button class="btn btn-defaul" onclick=Search()>Lọc</button>
+                            </div>
+                        </aside>
+
+                        <aside class="wedget__categories sidebar--banner">
+
+
+                            <img src="~/images/others/banner_left.jpg" />
+
+                        </aside>
+                    </div>
+                </form>
+            </div>
+            <div class="col-lg-9 col-12 order-1 order-lg-2">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="shop__list__wrapper d-flex flex-wrap flex-md-nowrap justify-content-between">
+                            <div class="shop__list nav justify-content-center" role="tablist">
+                                <a class="nav-item nav-link active" data-toggle="tab" href="#nav-grid" role="tab"><i class="fa fa-th"></i></a>
+                                <a class="nav-item nav-link" data-toggle="tab" href="#nav-list" role="tab"><i class="fa fa-list"></i></a>
+                            </div>
+                            <p>@Model.Count kết quả</p>
+                            <div class="orderby__wrapper">
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="tab__container">
+                    <div class="shop-grid tab-pane fade show active" id="nav-grid" role="tabpanel">
+                        <div class="row">
+                            <!-- Start Single Product -->
+                            @foreach (var item in Model)
+                            {
+                                <div class="product product__style--3 col-lg-4 col-md-4 col-sm-6 col-12">
+                                    <div class="product__thumb">
+                                        <a class="first__img" href="@Url.Action("Detail", "BookShop",new {@id=item.ID })"><img src="@Url.Content(((item.ImgProduct).ToList())[0].Link)" alt="product image" style="height:350px;width:250px;" class="img-fluid"></a>
+                                        <a class="second__img animation1" href="@Url.Action("Detail", "BookShop",new {@id=item.ID })"><img src="@Url.Content(((item.ImgProduct).ToList())[1].Link)" alt="product image" class="img-fluid"  style="height:350px;width:250px;"</a>
+                                        <div class="hot__box">
+                                            <span class="hot-label">BEST SALLER</span>
+                                        </div>
+                                    </div>
+
+                                    <div class="product__content content--center">
+
+                                        <h4><a href="single-product.html">@item.ProductName</a></h4>
+                                        <ul class="prize d-flex">
+                                            @{
+                                                if (item.Discout != 0)
+                                                {
+                                                    <li>@String.Format(culture, "{0:C0}", item.Discout)</li>
+                                                    <li class="old_prize">@String.Format(culture, "{0:C0}", item.ListPrice)</li>
+                                                }
+                                                else
+                                                {
+                                                    <li>@String.Format(culture, "{0:C0}", item.ListPrice)</li>
+                                                }
+                                            }
+                                        </ul>
+                                        <div class="action">
+                                            <div class="actions_inner">
+                                                <ul class="add_to_links">
+                                                    <li><a class="cart" onclick="AddtoCart(@item.ID)"><i class="bi bi-shopping-bag4"></i></a></li>
+
+                                                </ul>
+                                            </div>
+                                        </div>
+                                        <div class="product__hover--content">
+                                            <ul class="rating d-flex">
+                                                <li class="on"><i class="fa fa-star-o"></i></li>
+                                                <li class="on"><i class="fa fa-star-o"></i></li>
+                                                <li class="on"><i class="fa fa-star-o"></i></li>
+                                                <li><i class="fa fa-star-o"></i></li>
+                                                <li><i class="fa fa-star-o"></i></li>
+                                            </ul>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            }
+
+                        </div>
+
+                    </div>
+                    <div class="shop-grid tab-pane fade" id="nav-list" role="tabpanel">
+                        <div class="list__view__wrapper">
+                            <!-- Start Single Product -->
+                            @foreach (var item in Model)
+                            {
+                                <div class="list__view" style="border:2px;border-color:yellow;margin-top:5px;">
+                                    <div class="thumb">
+                                        <a class="first__img" href="@Url.Action("Detail", "BookShop", new { @id = item.ID })"><img src="@Url.Content(((item.ImgProduct).ToList())[0].Link)" alt="product image"></a>
+                                        <a class="second__img animation1" href="@Url.Action("Detail", "BookShop", new { @id = item.ID })"><img src="@Url.Content(((item.ImgProduct).ToList())[1].Link)" alt="product image"></a>
+                                    </div>
+                                    <div class="content">
+                                        <h2><a href="single-product.html">@item.ProductName</a></h2>
+                                        <ul class="rating d-flex">
+                                            <li class="on"><i class="fa fa-star-o"></i></li>
+                                            <li class="on"><i class="fa fa-star-o"></i></li>
+                                            <li class="on"><i class="fa fa-star-o"></i></li>
+                                            <li class="on"><i class="fa fa-star-o"></i></li>
+                                            <li><i class="fa fa-star-o"></i></li>
+                                            <li><i class="fa fa-star-o"></i></li>
+                                        </ul>
+                                        <ul class="prize__box">
+                                            @{
+                                                if (item.Discout != 0)
+                                                {
+                                                    <li>@String.Format(culture, "{0:C0}", item.Discout)</li>
+                                                    <li class="old_prize">@String.Format(culture, "{0:C0}", item.ListPrice)</li>
+                                                }
+                                                else
+                                                {
+                                                    <li>@String.Format(culture, "{0:C0}", item.ListPrice)</li>
+                                                }
+                                            }
+                                        </ul>
+                                        <p>@item.Detail</p>
+                                        <ul class="cart__action d-flex">
+                                            <li class="cart"><button class="btn btn-warning" onclick="AddtoCart(@item.ID)">Thêm vào giỏ</button></li>
+                                           
+                                        </ul>
+
+                                    </div>
+                                </div>
+                                <!-- End Single Product -->
+                                <!-- Start Single Product -->
+                                <!-- End Single Product -->
+                            }
+                        </div>
+                    </div>
+
+                </div>
+                <ul class="wn__pagination" id="pagedList">
+                    @*<li class="active"><a href="#">1</a></li>
+                         <li><a href="#">2</a></li>
+                         <li><a href="#">3</a></li>
+                        <li><a href="#">4</a></li>
+                        <li><a href="#"><i class="zmdi zmdi-chevron-right"></i></a></li>*@
+
+
+                    @Html.PagedListPager(Model, page => Url.Action("SearchBook",
+                    new { page, size = ViewBag.currentSize, cate = ViewBag.CateChose1, suplier = ViewBag.SuplierChose1, name1 = ViewBag.Name }))
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section scripts {
+
+    <script>
+
+        $(document).ready(function () {
+
+
+            $('.btnCate').click(function () {
+
+                var btn = $(this);
+                if (btn.hasClass('btn-default')) {
+
+                    btn.removeClass('btn-default').addClass('btn-success');
+                }
+                else {
+                    btn.removeClass('btn-success').addClass('btn-default');
+                }
+            });
+            $('.btnSup').click(function () {
+
+                var btn = $(this);
+                if (btn.hasClass('btn-default')) {
+
+                    btn.removeClass('btn-default').addClass('btn-success');
+                }
+                else {
+                    btn.removeClass('btn-success').addClass('btn-default');
+                }
+            });
+        });
+        function findButtonbyTextContent() {
+
+        }
+        function Search() {
+            var buttonCate = document.querySelectorAll('.btnCate');
+            const cate = new Array(buttonCate.length);
+            var j = 0;
+            for (var i = 0; i <= buttonCate.length; i++) {
+                if ($(buttonCate[i]).hasClass('btn-success')) {
+                    cate[j] = $(buttonCate[i]).text();
+                    j++;
+                }
+            }
+
+
+            var buttonSup = document.querySelectorAll('.btnSup');
+            const Suplier = new Array(buttonSup.length);
+            var t = 0;
+            for (var i = 0; i <= buttonSup.length; i++) {
+                if ($(buttonSup[i]).hasClass('btn-success')) {
+                    Suplier[t] = $(buttonSup[i]).text();
+                    t++;
+                }
+            }
+
+            var name = $("#searchName").val();
+            location.href = '@Url.Action("SearchBook", "BookShop")?cate=' + cate + "&suplier=" + Suplier + "&name1=" + name;
+        }
+    </script>
+    <script type="text/javascript">
+        function AddtoCart(item) {
+
+            $.ajax({
+                type: 'GET',
+                  url: '@Url.Action("Add", "Cart")',
+                 contentType: 'application/json', // this
+                 datatype: 'json',
+                  data: { id: item   }, // and this
+                success: function (data) {
+                    if (data != -1) {
+                        $("#cartItem").text(data);
+                    }
+
+                    else {
+                        window.location.href = "/Account/Login";
+                    }
+
+
+                   }
+            });
+
+        }
+    </script>
+}

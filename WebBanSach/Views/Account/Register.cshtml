@@ -1,0 +1,51 @@
+﻿@model WebBanSach.Models.RegisterViewModel
+@{
+    ViewBag.Title = "Register";
+}
+@using (Html.BeginForm("Register", "Account", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+{
+    @Html.AntiForgeryToken()
+    <div class="login_register_wrap section" style="margin-top:200px;">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-xl-6 col-md-10">
+                    <div class="login_wrap">
+                        <div class="padding_eight_all bg-white">
+                            <div class="heading_s1">
+                                <h3>Tạo tài khoản</h3>
+                            </div>
+                            @if (ViewData.ModelState[""] != null && ViewData.ModelState[""].Errors.Count > 0)
+                            {
+                                <div class="alert alert-error" id="msg">
+                                    <button type="button" class="close" data-dismiss="alert">×</button>
+                                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                                </div>
+                            }
+                            <form method="post">
+                               
+                              
+                                <div class="form-group">
+                                    @Html.TextBoxFor(m => m.Email, new { @class = "form-control", @placeholder = "Email của bạn", required = "" })
+                                    @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger" })
+                                </div>
+                               
+                                <div class="form-group">
+                                    @Html.PasswordFor(m => m.Password, new { @class = "form-control", @placeholder = "Mật khẩu", required = "" })
+                                    @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })
+                                </div>
+                                <div class="form-group">
+                                    @Html.PasswordFor(m => m.ConfirmPassword, new { @class = "form-control", @placeholder = "Nhập lại mật khẩu", required = "" })
+                                    @Html.ValidationMessageFor(m => m.ConfirmPassword, "", new { @class = "text-danger" })
+                                </div>
+                                <div class="form-group">
+                                    <button type="submit" class="btn btn-fill-out btn-block" name="register">Đăng ký</button>
+                                </div>
+                            </form>
+                            <div class="form-note text-center">Bạn đã có tài khoản? <a href="@Url.Action("Login","Account")">Đăng nhập</a></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}

@@ -1,0 +1,62 @@
+﻿@model WebBanSach.Models.Supplier
+
+@{
+    ViewBag.Title = "Edit";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+@using (Html.BeginForm("Edit", "Supplier", FormMethod.Post, new { @enctype = "multipart/form-data" }))
+{
+
+    if (TempData["kthanhcong"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible" role="alert">
+            <strong>@TempData["kthanhcong"]</strong>
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+    }
+    @Html.AntiForgeryToken()
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title">
+                <strong class="text-uppercase text-danger">Cập nhật nhà cung cấp</strong>
+            </h3>
+
+            <div class="card-tools">
+                <button type="submit" class="btn btn-success btn-sm"> <i class="far fa-save"></i> Lưu </button>
+                <a class="btn btn-danger btn-sm" href=" @Url.Action("Index", "Supplier")" role="button">
+                    <i class="fas fa-times"></i> Trở lại
+                </a>
+            </div>
+
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-9">
+                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                    @Html.HiddenFor(model => model.ID)
+
+
+                    <div class="form-group">
+                        <label for="name">Tên nhà cung cấp</label>
+                        @Html.EditorFor(model => model.SuplierName, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.SuplierName, "", new { @class = "text-danger" })
+                    </div>
+
+
+                    <div class="form-group">
+                        <label for="">Trạng thái</label>
+                        @Html.DropDownListFor(model => model.Status, new[] {
+                      new SelectListItem{Value="1", Text="Hoạt Động"},
+                         new SelectListItem{Value="0", Text="Ngưng Hoạt Động"}
+                   }, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.Status, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+<script src="~/Public/css/mainAdmin.js"></script>

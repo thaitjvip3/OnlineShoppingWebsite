@@ -1,0 +1,86 @@
+﻿@model IEnumerable<WebBanSach.Models.CartDetail>
+
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var culture = System.Globalization.CultureInfo.GetCultureInfo("vi-VN");
+    double totalPrice = 0;
+}  
+
+<!-- START SECTION SHOP -->
+<div class="section" style="margin-top:200px">
+    <div class="container">
+        @using (Html.BeginForm("Create", "Order",new {idCart=Model.ElementAt(0).IDCart } ,FormMethod.Post, new { @enctype = "multipart/form-data" }))
+        {
+            <div class="row">
+
+                <div class="col-md-6">
+                    <div class="heading_s1">
+                        <h4>Thông tin hoá đơn</h4>
+                    </div>
+                    <div class="form-group">
+                        <input name="Address" id="Address" placeholder="Số nhà / Tên đường / Phường, Xã" class="form-control" />
+                        <span style="color:red;">@ViewBag.Error</span>
+                    </div>
+                    <div class="form-group">
+                        <input name="Phone" id="Phone" value="@ViewBag.Phone" placeholder="Số điện thoại *" class="form-control" />
+                        <span style="color:red;">@ViewBag.Error</span>
+                    </div>
+                    <div class="heading_s1">
+                        <h4>Thông tin thêm</h4>
+                    </div>
+                    <div class="form-group mb-0">
+                        <textarea rows="5" class="form-control" placeholder="Lời nhắn" name="note" id="Note"></textarea>
+                    </div>
+
+                </div>
+                <div class="col-md-6">
+                    <div class="order_review">
+                        <div class="heading_s1">
+                            <h4>Thông tin đơn hàng</h4>
+                        </div>
+                        <div class="table-responsive order_table">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>Sản phẩm</th>
+                                        <th>Tổng</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+
+                                    @foreach (var item in Model)
+                                    {
+                                        var totalPriceProduct = item.Product.Discout != 0 ? (item.Product.Discout * item.Quality) : (item.Product.ListPrice * item.Quality);
+                                        <tr>
+                                            <td>@item.Product.ProductName <span class="product-qty">x @item.Quality</span></td>
+                                            <td>@String.Format(culture, "{0:C0}", totalPriceProduct)</td>
+                                        </tr>
+                                        totalPrice += (double)totalPriceProduct;
+                                    }
+
+                                </tbody>
+                                <tfoot>
+                                    <tr>
+                                        <th>Tổng</th>
+                                        <td class="product-subtotal">@String.Format(culture, "{0:C0}", totalPrice)</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Phí giao hàng</th>
+                                        <td>Miễn phí</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Tổng cộng</th>
+                                        <td class="product-subtotal">@String.Format(culture, "{0:C0}", totalPrice)</td>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                        <button type="submit" class="btn btn-fill-out btn-block">Đặt hàng</button>
+                    </div>
+                </div>
+         
+            </div>
+        }
+        </div>
+</div>

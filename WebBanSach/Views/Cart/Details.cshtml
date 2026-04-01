@@ -1,0 +1,102 @@
+﻿@model IEnumerable<WebBanSach.Models.CartDetail>
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+}
+<div class="cart-main-area section-padding--lg bg--white">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12 col-sm-12 ol-lg-12">
+                <form action="#">
+                    <div class="table-content wnro__table table-responsive">
+                        <table>
+                            <thead>
+                                <tr class="title-top">
+                                 
+                                    <th class="product-thumbnail">Hình</th>
+                                    <th class="product-name">Tên sách</th>
+                                    <th class="product-price">Giá</th>
+                                    <th class="product-quantity">Số lượng</th>
+
+                                    <th class="product-remove">Bỏ</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model)
+                                {
+                                    dynamic price = item.Product.Discout != 0 ? item.Product.Discout : item.Product.ListPrice;
+
+                                <tr>
+                                   
+                                    <td class="product-thumbnail"><a href="#"><img src="@Url.Content(((item.Product.ImgProduct).ToList())[0].Link)" alt="product img"></a></td>
+                                    <td class="product-name"><a href="#">@item.Product.ProductName</a></td>
+                                    <td class="product-price"><span class="amount">@price</span></td>
+                                    <td class="product-quantity"><input id="input_quantity" onclick=Change(this,'@item.ID') type="number" value="@item.Quality" min="1" max="@item.Product.Quality"></td>
+
+                                    <td><button class="btn btn-danger" onclick=Remove(this,'@item.ID')>X</button></td>
+                                </tr>
+
+                                }
+
+                            </tbody>
+                        </table>
+                    </div>
+                </form>
+                <div class="cartbox__btn">
+
+
+                    <div class="text-right"><a class="btn btn-info" href="@Url.Action("Create","Order")">Thanh toán</a></div>
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+@section scripts {
+
+    <script type="text/javascript">
+        function Remove(e, idCartDetail) {
+            $.ajax({
+                url: '@Url.Action("Delete", "Cart")',
+                type: 'POST',
+                async: false,
+                cache: false,
+                data: { id: idCartDetail },
+                success: function () {
+                    $(e).parents('tr').remove();
+
+                },
+                error: function (request, status, error) {
+                    alert('error');
+                }
+            });
+        }
+    </script>
+    <script>
+        function Change(e,idCartDetail) {
+            var Quality = $(e).val();
+            $.ajax({
+                url: '@Url.Action("Edit", "Cart")',
+                type: 'POST',
+                async: false,
+                cache: false,
+                data: {
+                    id: idCartDetail,
+                    qua: Quality
+                    },
+                success: function () {
+                   
+
+                },
+                error: function (request, status, error) {
+                    alert('error');
+                }
+            });
+        }
+    </script>
+
+}

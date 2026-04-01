@@ -1,0 +1,25 @@
+﻿
+.input_currency {
+    font-family: 'Roboto', sans-serif;
+    font-size: 18px;
+    line-height: 1.5;
+    color: #111;
+    display: block;
+    padding: 0 20px 0 15px;
+}
+
+.custom_input_font_size {
+    font-family: 'Roboto', sans-serif;
+    font-size: 16px;
+    line-height: 1.5;
+    color: #111;
+    display: block;
+    padding: 0 20px 0 15px;
+}
+
+
+.disabled {
+    pointer-events: none;
+    opacity: 0.6;
+}
+

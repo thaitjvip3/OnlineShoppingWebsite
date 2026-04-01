@@ -1,0 +1,125 @@
+﻿@model IEnumerable<WebBanSach.Models.Category>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link href="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.6.1/css/bootstrap4-toggle.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.6.1/js/bootstrap4-toggle.min.js"></script>
+}
+<div class="card">
+    <div class="card-header">
+        <h3 class="card-title">
+            <strong class="text-uppercase text-danger">Danh sách thể loại sách</strong>
+        </h3>
+        <div class="card-tools">
+            <a class="btn btn-success btn-sm" href="@Url.Action("Create","Category")" role="button">
+                <i class="fas fa-plus"></i> Thêm mới
+            </a>
+          
+        </div>
+    </div>
+    <div class="card-body">
+        <table id="example2" class="table table-bordered">
+            <thead>
+                <tr>
+                    <th class="text-center" style="width:40px">ID</th>
+                    <th class="text-center">Tên thể loại</th>
+                    @* <th class="text-center">Mã loại cha</th>*@
+                    <th class="text-center">Tùy chọn</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                   
+                    <tr>
+                        <td>@Html.DisplayFor(modelItem => item.ID)</td>
+                        <td>
+                            <a class="link-black" href="@Url.Action("Details","Category",new { id=item.ID})">
+                                @Html.DisplayFor(modelItem => item.CateName)
+                            </a>
+                        </td>
+
+                        <td class="text-center">
+                            @{
+                                if (item.Status == 1)
+                                {
+                                    <input type="checkbox" data-toggle="toggle" onchange="check('@item.ID')" checked data-size="sm" data-onstyle="outline-dark" data-offstyle="outline-primary">
+                                }
+                                else
+                                {
+                                    <input type="checkbox" data-toggle="toggle" onchange="check('@item.ID')" data-size="sm" data-onstyle="outline-dark" data-offstyle="outline-primary">
+                                }
+                            }
+                            <a class="btn btn-info btn-sm" href="@Url.Action("Edit","Category",new { id=item.ID })" role="button">
+                                <i class="fas fa-edit"></i>
+                            </a>
+                        
+                                    <a class="btn btn-danger btn-sm" onclick=deleteRow(this,'@item.ID') role="button">
+                                        <i class="fas fa-trash-alt"></i>
+                                    </a>
+                               
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+<script>
+    function deleteRow(e, idCategory) {
+        $.ajax({
+            type: 'GET',
+            url: '@Url.Action("DeleteAjax", "Category")',
+            contentType: 'application/json', // this
+            datatype: 'json',
+            data: { id: idCategory   }, // and this
+            success: function (data) {
+                if (data == 'True') { //cho phép xóa
+                    $(e).parents('tr').remove();
+                    $.toast({
+                        heading: 'Thành công',
+                        text: 'Đã xóa dữ liệu thành công',
+                        showHideTransition: 'slide',
+                        icon: 'success',
+                        position: 'top-right'
+                    })
+                }
+                else {
+                    $.toast({
+                        heading: 'Xoá thất bại',
+                        text: 'Có Sách Đang Sử Dụng Loại này',
+                        showHideTransition: 'slide',
+                        icon: 'error',
+                        position:'top-right'
+                    })
+                }
+            }
+        });
+    }
+
+    function check(idProduct) {
+        $.ajax({
+            url: '@Url.Action("ChangeStatus", "Category")',
+            type: 'POST',
+            async: false,
+            cache: false,
+            data: { id: idProduct },
+            success: function () {
+                $.toast({
+                    heading: 'Cập nhật thành công',
+                    text: 'Đã đổi trạng thái thành công',
+                    showHideTransition: 'slide',
+                    icon: 'success',
+                    position: 'top-right'
+                })
+            },
+            error: function (request, status, error) {
+                alert('error');
+            }
+        });
+    }
+</script>

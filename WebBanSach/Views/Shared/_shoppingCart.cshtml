@@ -1,0 +1,12 @@
+﻿
+@{ 
+    if (Session["CartCounter"] == null)
+    {
+        <a   href='@Url.Action("Details", "Cart")'><span class="product_qun"  id="cartItem">0</span></a>
+    }
+    else
+    {
+        <a  href='@Url.Action("Details", "Cart")'><span class="product_qun" id="cartItem">@Session["CartCounter"]</span></a>
+    }
+}
+

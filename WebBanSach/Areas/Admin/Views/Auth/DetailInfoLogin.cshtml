@@ -1,0 +1,88 @@
+﻿@model WebBanSach.Models.SystemUser
+@{
+    ViewBag.Title = "Thông tin tài khoản";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+<div class="container-fluid">
+    <div class="main-body">
+        <div class="col-md-12">
+            <div class="card mb-3">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-sm-8">
+                            <strong class="text-uppercase text-danger">Thông tin tài khoản</strong>
+                        </div>
+                        <div class="col-sm-4 text-lg-right">
+                            <a class="btn btn-info btn-sm " href="@Url.Action("Edit","SystemUsers",new { id = Model.UserName })" role="button">
+                                <i class="fas fa-edit"></i>
+                            </a>
+                            <a class="btn btn-info btn-sm " href="@Url.Action("ChangePassWord","Auth",new { id = Model.UserName })" role="button">
+                                Đổi mật khẩu
+                                <i class="fas fa-key"></i>
+                            </a>
+                        </div>
+                       
+                           
+                      
+                    </div>
+                    <hr>
+                    <div class="row">
+                        <div class="col-sm-3">
+                            <h6 class="mb-0">Tên đăng nhập</h6>
+                        </div>
+                        <div class="col-sm-9 text-secondary">
+                            @Html.DisplayFor(model => model.UserName)
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="row">
+                        <div class="col-sm-3">
+                            <h6 class="mb-0">Họ tên</h6>
+                        </div>
+                        <div class="col-sm-9 text-secondary">
+                            @Html.DisplayFor(model => model.DisplayName)
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="row">
+                        <div class="col-sm-3">
+                            <h6 class="mb-0">Email</h6>
+                        </div>
+                        <div class="col-sm-9 text-secondary">
+                            @Html.DisplayFor(model => model.Email)
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="row">
+                        <div class="col-sm-3">
+                            <h6 class="mb-0">Phone</h6>
+                        </div>
+                        <div class="col-sm-9 text-secondary">
+                            @Html.DisplayFor(model => model.Phone)
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="row">
+                        <div class="col-sm-3">
+                            <h6 class="mb-0">Giới tính</h6>
+                        </div>
+                        <div class="col-sm-9 text-secondary">
+                           
+                            
+                            @Html.DisplayFor(model => model.Gender)
+
+                        </div>
+                    </div>
+                    <hr>
+
+                </div>
+            </div>
+
+
+
+        </div>
+    </div>
+
+</div>
+
+

@@ -1,0 +1,266 @@
+﻿@model IEnumerable<WebBanSach.Models.Product>
+
+@{
+    ViewBag.Title = "Home Page";
+    var list = Model.OrderByDescending(p => p.ID).ToList().Take(9);
+    var listSale = Model.Where(p => p.Discout != 0).ToList();
+    var culture = System.Globalization.CultureInfo.GetCultureInfo("vi-VN");
+}
+
+<!-- Start Slider area -->
+<div class="slider-area brown__nav slider--15 slide__activation slide__arrow01 owl-carousel owl-theme">
+    @*Start Single Slide*@
+    <div class="slide animation__style10 bg-image--1  fullscreen align__center--left">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="slider__content">
+                        <div class="contentbox">
+                            <h2>Buy <span>your </span></h2>
+                            <h2>favourite <span>Book </span></h2>
+                            <h2>from <span>Here </span></h2>
+                            <a class="shopbtn" href="#">shop now</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    @*End Single Slide
+        Start Single Slide*@
+    <div class="slide animation__style10 bg-image--8 fullscreen align__center--left">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="slider__content">
+                        <div class="contentbox">
+                            <h2>Buy <span>your </span></h2>
+                            <h2>favourite <span>Book </span></h2>
+                            <h2>from <span>Here </span></h2>
+                            <a class="shopbtn" href="#">shop now</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    @*End Single Slide*@
+</div>
+
+
+
+
+<!-- Start BEst Seller Area -->
+<section class="wn__product__area brown--color pt--80  pb--30">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-11">
+                <div class="section__title text-center">
+                    <h2 class="title__be--2">Sách  <span class="color--theme">Mới</span></h2>
+                    <p> Một cuốn sách hay trên giá sách là một người bạn dù quay lưng lại nhưng vẫn là bạn tốt</p>
+                </div>
+            </div>
+            <div class="col-lg-1">
+                <button class="btn btn-outline-info right" onclick="location.href='@Url.Action("SearchBook", "BookShop")'">Thêm</button>
+            </div>
+        </div>
+        <!-- Start Single Tab Content -->
+       
+        <div class="furniture--4 border--round arrows_style owl-carousel owl-theme row mt--50">
+
+            @foreach (var item in list)
+            {
+                <div class="product product__style--3">
+                    <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                        <div class="product__thumb">
+                            <a class="first__img" href="@Url.Action("Detail", "BookShop",new {@id=item.ID })"><img src="@Url.Content(((item.ImgProduct).ToList())[0].Link)" class="img-fluid" alt="product image" style="width:230px;height:350px"></a>
+                            <a class="second__img animation1" href="@Url.Action("Detail", "BookShop",new {@id=item.ID })"><img src="@Url.Content(((item.ImgProduct).ToList())[1].Link)" alt="product image"  class="img-fluid"  style="width:230px;height:350px"></a>
+                            <div class="hot__box">
+                                <span class="hot-label">New</span>
+                                @if (item.Discout != 0)
+                                {
+                                    <p class="hot-label">Sale</p>
+                                }
+                            </div>
+                        </div>
+                        <div class="product__content content--center">
+                            <h4><a href="single-product.html">@item.ProductName</a></h4>
+                            <ul class="prize d-flex">
+
+                                @{
+                                    if (item.Discout != 0)
+                                    {
+                                        <li>@String.Format(culture, "{0:C0}", item.Discout)</li>
+                                        <li class="old_prize">@String.Format(culture, "{0:C0}", item.ListPrice)</li>
+                                    }
+                                    else
+                                    {
+                                        <li>@String.Format(culture, "{0:C0}", item.ListPrice)</li>
+                                    }
+                                }
+
+
+                            </ul>
+                            <div class="action">
+                                <div class="actions_inner">
+                                    <ul class="add_to_links">
+                                        <li><a class="cart" onclick="AddtoCart(@item.ID)"><i class="bi bi-shopping-bag4"></i></a></li>
+
+
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="product__hover--content">
+                                <ul class="rating d-flex">
+                                    <li class="on"><i class="fa fa-star-o"></i></li>
+                                    <li class="on"><i class="fa fa-star-o"></i></li>
+                                    <li class="on"><i class="fa fa-star-o"></i></li>
+                                    <li><i class="fa fa-star-o"></i></li>
+                                    <li><i class="fa fa-star-o"></i></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+
+        </div>
+
+
+
+
+
+
+
+
+
+        <!-- End Single Tab Content -->
+    </div>
+</section>
+
+
+<section class="wn__newsletter__area bg-image--2">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-7 offset-lg-5 col-md-12 col-12 ptb--150">
+
+            </div>
+        </div>
+    </div>
+</section>
+<section class="wn__bestseller__area bg--white pt--80  pb--30">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-11">
+                <div class="section__title text-center">
+                    <h2 class="title__be--2">Sách <span class="color--theme">khác</span></h2>
+                    <p>Không cần phải đốt sách để phá hủy một nền văn hóa. Chỉ cần buộc người ta ngừng đọc mà thôi.</p>
+                </div>
+            </div>
+            <div class="col-lg-1">
+                <button class="btn btn-outline-info right" onclick="location.href='@Url.Action("SearchBook", "BookShop")'">Thêm</button>
+            </div>
+        </div>
+
+        <div class="tab__container mt--60">
+            <!-- Start Single Tab Content -->
+
+            <div class="row single__tab tab-pane fade show active" id="nav-all" role="tabpanel">
+
+                <div class="product__indicator--4 arrows_style owl-carousel owl-theme">
+                    @foreach (var item in listSale)
+                    {
+                        <div class="single__product">
+
+                            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+
+                                <div class="product product__style--3">
+
+                                    <div class="product__thumb">
+                                        <a class="first__img" href="@Url.Action("Detail", "BookShop",new {@id=item.ID })"><img src="@Url.Content(((item.ImgProduct).ToList())[0].Link)" alt="product image" class="img-fluid"  style="width:230px;height:350px"></a>
+                                        <a class="second__img animation1" href="@Url.Action("Detail", "BookShop",new {@id=item.ID })"><img src="@Url.Content(((item.ImgProduct).ToList())[1].Link)" alt="product image" class="img-fluid"  style="width:230px;height:350px"></a>
+                                        <div class="hot__box">
+                                            <span class="hot-label">Sale</span>
+                                        </div>
+                                    </div>
+                                    <div class="product__content content--center">
+                                        <h4><a href="single-product.html">@item.ProductName</a></h4>
+                                        <ul class="prize d-flex">
+                                            @{
+                                                if (item.Discout != 0)
+                                                {
+                                                    <li>@String.Format(culture, "{0:C0}", item.Discout)</li>
+                                                    <li class="old_prize">@String.Format(culture, "{0:C0}", item.ListPrice)</li>
+                                                }
+                                                else
+                                                {
+                                                    <li>@String.Format(culture, "{0:C0}", item.ListPrice)</li>
+                                                }
+                                            }
+                                        </ul>
+                                        <div class="action">
+                                            <div class="actions_inner">
+                                                <ul class="add_to_links">
+                                                    <li><a class="cart" onclick="AddtoCart(@item.ID)"><i class="bi bi-shopping-bag4"></i></a></li>                                                 
+                                                  
+                                                </ul>
+                                            </div>
+                                        </div>
+                                        <div class="product__hover--content">
+                                            <ul class="rating d-flex">
+                                                <li class="on"><i class="fa fa-star-o"></i></li>
+                                                <li class="on"><i class="fa fa-star-o"></i></li>
+                                                <li class="on"><i class="fa fa-star-o"></i></li>
+                                                <li><i class="fa fa-star-o"></i></li>
+                                                <li><i class="fa fa-star-o"></i></li>
+                                            </ul>
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                            <!-- Start Single Product -->
+
+                        </div>
+                    }
+
+                </div>
+
+            </div>
+
+
+
+            <!-- End Single Tab Content -->
+        </div>
+    </div>
+</section>
+@section scripts {
+
+    <script type="text/javascript">
+        function AddtoCart(item) {
+
+            $.ajax({
+                type: 'GET',
+                  url: '@Url.Action("Add", "Cart")',
+                 contentType: 'application/json', // this
+                 datatype: 'json',
+                  data: { id: item   }, // and this
+                success: function (data) {
+                    if (data != -1) {
+                        $("#cartItem").text(data);
+                    }
+
+                    else {
+                        window.location.href = "/Account/Login";
+                    }
+
+
+                   }
+            });
+
+        }
+    </script>
+
+}

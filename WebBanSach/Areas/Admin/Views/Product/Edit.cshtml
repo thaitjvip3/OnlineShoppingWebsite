@@ -1,0 +1,128 @@
+﻿@model WebBanSach.Models.Product
+
+@{
+    ViewBag.Title = "Edit";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+    <script src="~/Scripts/jquery-3.4.1.min.js"></script>
+    <script src="~/Scripts/jquery.validate.min.js"></script>
+    <script src="~/Scripts/jquery.validate.unobtrusive.js"></script>
+}
+
+
+@using (Html.BeginForm("Edit", "Product", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    if (TempData["kthanhcong"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible" role="alert">
+            <strong>@TempData["kthanhcong"]</strong>
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+    }
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    @Html.HiddenFor(model => model.ID)
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title text-uppercase text-danger"><strong>Cập nhật Sách</strong></h3>
+            <div class="card-tools">
+                <button class="btn btn-success btn-sm" type="submit"><i class="fa fa-save"></i> Lưu</button>
+                <a class="btn btn-danger btn-sm" href="@Url.Action("Index","Product")" role="button"> <i class="fa fa-times"></i> Trở lại</a>
+            </div>
+        </div>
+        <div class="card-body">
+            <div class="row form-horizontal">
+                <div class="col-8">
+
+                    <div class="form-group">
+                        <label for="name" class="control-label">Tên sách</label>
+
+                        @Html.EditorFor(model => model.ProductName, new { htmlAttributes = new { @class = "form-control", @id = "name" } })
+                        @Html.ValidationMessageFor(model => model.ProductName, "", new { @class = "text-danger" })
+
+                    </div>
+                    <div class="form-group">
+                        <label for="name" class="control-label">Tác giả</label>
+                        @Html.EditorFor(model => model.Author, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.Author, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="form-group">
+                        <label for="detail" class="control-label">Review</label>
+
+                        @Html.TextAreaFor(model => model.Detail, new { @class = "form-control", @id = "detail", rows = 12 })
+                        @Html.ValidationMessageFor(model => model.Detail, "", new { @class = "text-danger" })
+
+                    </div>
+
+                </div>
+                <div class="col-4">
+                    <div class="form-group">
+                        <label for="IDCategory" class="control-label">Thể loại sách</label>
+                        <div class="col-md-10">
+                            @Html.DropDownList("IDCategory", null, htmlAttributes: new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.IDCategory, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="IDSupplier" class="control-label">Thương hiệu</label>
+                        @Html.DropDownList("IDSupplier", null, htmlAttributes: new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.IDSupplier, "", new { @class = "text-danger" })
+
+
+                    </div>
+                    <div class="form-group">
+                        <label for="price" class="control-label">Giá bán</label>
+                        @Html.EditorFor(model => model.ListPrice, new { htmlAttributes = new { @class = "form-control custom_input_font_size", @id = "price", @placeholder = "0" } })
+                        @Html.ValidationMessageFor(model => model.ListPrice, "", new { @class = "text-danger" })
+
+                    </div>
+
+                    <div class="form-group">
+                        <label for="discount" class="control-label">Giá khuyến mãi</label>
+                        @Html.EditorFor(model => model.Discout, new { htmlAttributes = new { @class = "form-control custom_input_font_size", @id = "discount", @placeholder = "0" } })
+                        @Html.ValidationMessageFor(model => model.Discout, "", new { @class = "text-danger" })
+                    </div>
+
+                    <div class="form-group">
+                        <label for="quantity" class="control-label">Số lượng</label>
+
+                        @Html.EditorFor(model => model.Quality, new { htmlAttributes = new { @class = "form-control custom_input_font_size", @id = "quantity", @placeholder = "0" } })
+                        @Html.ValidationMessageFor(model => model.Quality, "", new { @class = "text-danger" })
+
+                    </div>
+                    <div class="form-group">
+                        <label for="status" class="control-label">Trạng thái</label>
+                        @Html.DropDownListFor(p => p.Status, new[] {
+                   new SelectListItem{ Text="Xuất bản",Value="1"},
+                   new SelectListItem{ Text="Chưa xuất bản", Value="0"} }, new { @class = "form-control custom-select custom_input_font_size", @id = "status" })
+                    </div>
+
+
+
+                    <div class="form-group">
+                        <label for="customFile" class="control-label">Hình</label>
+                        <div class="custom-file custom_input_font_size">
+                            <input type="file" class="custom-file-input" accept="image/*" multiple name="files" id="customFile">
+                            <label class="custom-file-label" for="customFile">Chọn hình</label>
+                        </div>
+                        <p class="text-danger">@ViewBag.ShowError</p>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+
+<script>
+    $(".custom-file-input").on("change", function () {
+        var i = 0
+        var files = Array.from(this.files)
+        var fileName = files.map(f => { return i = i + 1 })
+        string = i + " tệp";
+        $(this).siblings(".custom-file-label").addClass("selected").html(string);
+    });
+</script>

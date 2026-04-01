@@ -1,0 +1,142 @@
+﻿@model IEnumerable<WebBanSach.Models.SystemUser>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link href="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.6.1/css/bootstrap4-toggle.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.6.1/js/bootstrap4-toggle.min.js"></script>
+    bool isAdmin = false;
+}
+
+<div class="card">
+    <div class="card-header">
+        <h3 class="card-title">
+            <strong class="text-uppercase text-danger">Người dùng hệ thống</strong>
+        </h3>
+        <div class="card-tools">
+            <a class="btn btn-success btn-sm" href="@Url.Action("Create","SystemUsers")" role="button">
+                <i class="fas fa-plus"></i> Thêm mới
+            </a>
+           
+        </div>
+    </div>
+    <div class="card-body">
+        <table class="table table-bordered" id="example2">
+            <thead>
+                <tr>
+                    <th style="width:30px" class="text-center">ID</th>
+                    <th>Họ và tên</th>
+                    <th>Email</th>
+                    <th>Số điện thoại</th>
+                    <th style="width:300px" class="text-center">Tuỳ chọn</th>
+
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td class="text-center">@item.UserName</td>
+                        <td>@item.DisplayName</td>
+                        <td>@item.Email</td>
+                        <td>@item.Phone</td>
+                        <td class="text-center">
+                            @{
+                                if (item.Status == 1)
+                                {
+                                    <input type="checkbox" data-toggle="toggle" onchange="check('@item.UserName')" checked data-size="sm" data-onstyle="outline-dark" data-offstyle="outline-primary">
+                                }
+                                else
+                                {
+                                    <input type="checkbox" data-toggle="toggle" onchange="check('@item.UserName')" data-size="sm" data-onstyle="outline-dark" data-offstyle="outline-primary">
+                                }
+                            }
+                            <a class="btn btn-info btn-sm" href="@Url.Action("Edit", "SystemUsers", new { id = item.UserName })" role="button">
+                                <i class="fas fa-edit"></i>
+                            </a>
+                            <a class="btn btn-danger btn-sm" onclick=deleteRow(this,'@item.UserName') role="button">
+                                <i class="fas fa-trash-alt"></i>
+                            </a>
+                            <a class="btn btn-warning btn-sm" onclick=ResetPass('@item.UserName') role="button">
+                                Khôi phục mật khẩu
+                               
+                            </a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+<script>
+    function deleteRow(e, idUser) {
+        $.ajax({
+            url: '@Url.Action("DeleteAjax", "SystemUsers")',
+            type: 'POST',
+            async: false,
+            cache: false,
+            data: { id: idUser },
+            success: function () {
+                $(e).parents('tr').remove();
+                $.toast({
+                    heading: 'Xóa thành công',
+                    text: 'Xóa thành công.',
+                    showHideTransition: 'slide',
+                    icon: 'success',
+                    position: 'top-right'
+                })
+            },
+            error: function (request, status, error) {
+                alert('error');
+            }
+        });
+
+
+    }
+
+    function check(idUser) {
+        $.ajax({
+            url: '@Url.Action("ChangeStatus", "SystemUsers")',
+            type: 'POST',
+            async: false,
+            cache: false,
+            data: { id: idUser },
+            success: function () {
+                $.toast({
+                    heading: 'Cập nhật thành công',
+                    text: 'Đã đổi trạng thái thành công',
+                    showHideTransition: 'slide',
+                    icon: 'success',
+                    position: 'top-right'
+                })
+            },
+            error: function (request, status, error) {
+                alert('error');
+            }
+        });
+    }
+     function ResetPass(idUser) {
+        $.ajax({
+            url: '@Url.Action("ResetPass", "SystemUsers")',
+            type: 'POST',
+            async: false,
+            cache: false,
+            data: { id: idUser },
+            success: function () {
+                $.toast({
+                    heading: 'Khôi phục thành công',
+                    text: 'Password mới sẽ là tên đăng nhập',
+                    showHideTransition: 'slide',
+                    icon: 'success',
+                    position: 'top-right'
+                })
+            },
+            error: function (request, status, error) {
+                alert('error');
+            }
+        });
+    }
+</script>

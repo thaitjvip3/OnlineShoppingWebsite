@@ -1,0 +1,86 @@
+﻿@model IEnumerable<WebBanSach.Models.Order>
+@{
+    ViewBag.Title = "MyOder";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<div class="maincontent bg--white pt--80 pb--55">
+    <div class="container">
+        <div class="row" style="margin-top:150px">
+            <div class="col-lg-3 col-12 md-mt-40 sm-mt-40">
+                <div class="shop__sidebar">
+                    <aside class="wedget__categories poroduct--cat">
+                        <h3 class="wedget__title">Quản lý tài khoản</h3>
+                        <ul>
+                            <li><a href="#">Thông tin tài khoản</a></li>
+                            <li><a href="@Url.Action("MyOder","Manage")">Đơn hàng></a></li>
+                            <li><a href="@Url.Action("ChangePassword","Manage")">Đổi mật khẩu</a></li>
+
+                        </ul>
+                    </aside>
+                </div>
+            </div>
+            <div class="col-lg-9 col-12 md-mt-40 sm-mt-40">
+                <div class="shop__sidebar">
+                    <aside class="wedget__categories poroduct--cat">
+
+                        <table class="table">
+                            <thead>
+                                <tr class="text-center">
+                                    <th>Hoá đơn</th>
+                                    <th>Ngày đặt</th>
+                                    <th>Trạng thái</th>
+                                    <th>Tổng</th>
+                                    <th>Tuỳ chọn</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model)
+                                {
+                                    dynamic status = "";
+                                    if (item.Status == 1)
+                                    {
+                                        status = "Đang xử lý.";
+                                    }
+                                    else if (item.Status == 2)
+                                    {
+                                        status = "Đang vận chuyển";
+                                    }
+                                    else if (item.Status == 3)
+                                    {
+                                        status = "Đã giao thành công";
+                                    }
+                                    else
+                                    {
+                                        status = "Đơn hàng bị hủy";
+                                    }
+                                <tr>
+                                    <td>#@item.ID</td>
+                                    <td>@item.OrderDate.ToString("dd MMM yyyy")</td>
+                                    <td class="text-center"><span class="badge badge-pill badge-success">@status</span></td>
+                                    <td>@String.Format(System.Globalization.CultureInfo.CurrentCulture, "{0:C0}", item.OrderDetail.Sum(p => p.Price * p.Quality)) cho @item.OrderDetail.Sum(p => p.Quality) Sản phẩm</td>
+                                    @{ if (item.Status == 0 || item.Status == 3)
+                                        {
+
+                                        }
+                                          else {
+                                                <td><a href="@Url.Action("Delete", "Order", new { id = item.ID })" class="btn btn-danger btn-sm">Xóa</a></td>
+                                            } 
+                                        
+                                     }
+
+                                </tr>
+                                }
+                            </tbody>
+                        </table>
+
+                    </aside>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+            <!-- JS Files -->

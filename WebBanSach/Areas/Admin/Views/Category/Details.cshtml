@@ -1,0 +1,67 @@
+﻿@model WebBanSach.Models.Category
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<div class="container-fluid">
+    <div class="main-body">
+        <div class="col-md-12">
+            <div class="card mb-3">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-sm-8">
+                            <strong class="text-uppercase text-danger">Thông tin Loại sản phẩm</strong>
+                        </div>
+                        <div class="col-sm-4 text-lg-right">
+                            <a class="btn btn-info btn-sm " href="@Url.Action("Edit","Category",new { id = Model.ID })" role="button">
+                                <i class="fas fa-edit"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="row">
+                        <div class="col-sm-3">
+                            <h6 class="mb-0">Mã</h6>
+                        </div>
+                        <div class="col-sm-9 text-secondary">
+                            @Html.DisplayFor(model => model.ID)
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="row">
+                        <div class="col-sm-3">
+                            <h6 class="mb-0">Tên thể loại</h6>
+                        </div>
+                        <div class="col-sm-9 text-secondary">
+                            @Html.DisplayFor(model => model.CateName)
+                        </div>
+                    </div>
+                    <hr>
+
+
+                    <div class="row">
+                        <div class="col-sm-3">
+                            <h6 class="mb-0">Trạng thái</h6>
+                        </div>
+                        <div class="col-sm-9 text-secondary">
+                            @if (Model.Status == 1)
+                            {
+                                <p>Hoạt động</p>
+                            }
+                            else
+                            {
+                                <p>Không hoạt động</p>
+                            }
+
+                        </div>
+                    </div>
+                    <hr>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
